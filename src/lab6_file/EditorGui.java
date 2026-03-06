@@ -7,8 +7,7 @@ package lab6_file;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import static java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment;
-import java.awt.List;
-import java.io.File;
+import java.util.List;
 import java.util.ArrayList;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -17,6 +16,7 @@ import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.io.File;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -422,7 +422,7 @@ public class EditorGui extends BaseFrame {
                 guardarDocxConChooser();
                 return;
             }
-            Wordexportar.guardar(areaTexto, ArchivoActual);
+            WordExportar.guardar(areaTexto, ArchivoActual);
             JOptionPane.showMessageDialog(this, "Archivo guardado.");
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Error al guardar: " + ex.getMessage());
@@ -447,7 +447,7 @@ public class EditorGui extends BaseFrame {
                 ruta += ".docx";
             }
             ArchivoActual = new File(ruta);
-            Wordexportar.guardar(areaTexto, ArchivoActual);
+            WordExportar.guardar(areaTexto, ArchivoActual);
             JOptionPane.showMessageDialog(this, "Guardado correctamente.");
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Error al guardar: " + ex.getMessage());

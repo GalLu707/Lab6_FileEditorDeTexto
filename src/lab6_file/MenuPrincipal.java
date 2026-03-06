@@ -7,11 +7,13 @@ package lab6_file;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Font;
+import java.io.File;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  *
@@ -51,7 +53,7 @@ public class MenuPrincipal extends BaseFrame{
         setContentPane(panel);
         btnNuevo.addActionListener(e -> {
             setVisible(false);
-            new EditorGUI(this);
+            new EditorGui(this, null);
         });
         btnAbrir.addActionListener(e -> abrirDocxEnEditor());
         btnSalir.addActionListener(e -> System.exit(0));
@@ -68,7 +70,7 @@ public class MenuPrincipal extends BaseFrame{
         
         boton.setBackground(new Color(240,240,250));
         boton.setForeground(new Color (50,50,80));
-        boton.setBorder(BorderFactory.CreateCompoundBorder(
+        boton.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(
                 new Color(180, 180,200),1,true)
                 , new EmptyBorder(8,15,8,15)));
@@ -79,7 +81,7 @@ public class MenuPrincipal extends BaseFrame{
      
      
      
-     private void abrirDocx(){
+     private void abrirDocxEnEditor(){
          JFileChooser fc = new JFileChooser();
          fc.setDialogTitle("abrir .docx");
          fc.setFileFilter(new FileNameExtensionFilter("Documento Word (*.docx)", "docx"));
@@ -100,6 +102,6 @@ public class MenuPrincipal extends BaseFrame{
          new MenuPrincipal();
      }
     
-    
+     
     
 }
