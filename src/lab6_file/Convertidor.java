@@ -51,7 +51,7 @@ public class Convertidor {
             kit.read(fis, editor.getDocument(), 0);
         }
         
-        //Wordexportar.guardar(editor, asegurarDocx(docxSalida));
+        WordExportar.guardar(editor, asegurarDocx(docxSalida));
     }
     
     private static File asegurarRtf(File archivo){

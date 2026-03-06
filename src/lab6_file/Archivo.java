@@ -57,7 +57,7 @@ public class Archivo {
     
     public void guardarDesdeEditor(JTextPane editor)throws Exception{
         validarEscritura();
-        //Wordexportar.guardar(editor, archivo);
+        WordExportar.guardar(editor, archivo);
     }
     
     private File asegurarExtensionDocx(File archivo){
