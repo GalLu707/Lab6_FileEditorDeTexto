@@ -15,6 +15,8 @@ import javax.swing.JButton;
 import javax.swing.JColorChooser;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -25,7 +27,9 @@ import javax.swing.JTextPane;
 import javax.swing.JToolBar;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultStyledDocument;
 import javax.swing.text.Element;
 import javax.swing.text.SimpleAttributeSet;
@@ -75,7 +79,7 @@ public class EditorGui extends BaseFrame {
         initComponents();
         if(fileToOpen != null){
             cargarDocxEnEditor(fileToOpen);
-            archivoActual= fileToOpen;
+            ArchivoActual= fileToOpen;
         }
         setVisible(true);
         
@@ -86,7 +90,7 @@ public class EditorGui extends BaseFrame {
         setContentPane(panelPrincipal);
         construirPanelNorte();
         construirPanelCentro();
-        contruirPanelCentro();
+        construirPanelCentro();
         construirPanelSur();
     }
     private void construirPanelNorte(){
@@ -97,14 +101,14 @@ public class EditorGui extends BaseFrame {
         barra.setFloatable(false);
         JLabel lblFuente = new JLabel("Fuente: ");
         barra.add(lblFuente);
-        cbFuentes= crearCombFuentes();
-        cbFuentes.setMaximunSize(New Dimension(220, 28));
+        cboFuetes= crearComboFuentes();
+        cboFuetes.setMaximumSize(new Dimension(220, 28));
         barra.addSeparator(new Dimension(10,0));
         JLabel blTam = new JLabel("tamaño: ");
         barra.add(blTam);
-        cboTamanio = crearComboTamanio();
-        cboTamanio.setMaximunSize(new Dimension(80,28));
-        barra.add(cboTamanios);
+        cbotamano = crearComboTamanio();
+        cbotamano.setMaximumSize(new Dimension(80,28));
+        barra.add(cbotamano);
         barra.addSeparator(new Dimension(10, 0));
         btnNegrita = new JButton("B");
         btnNegrita.setToolTipText("Negrita");
@@ -146,14 +150,14 @@ public class EditorGui extends BaseFrame {
             insertarTablaEnTexto(dlg.getFilas(), dlg.getCols());
         });
         barra.add(btnTabla);
-        panelNorte.add(barra, BorderLayout.NORTH);
+        PanelNorte.add(barra, BorderLayout.NORTH);
         JPanel panelUsados = new JPanel(new FlowLayout(FlowLayout.LEFT, 6, 4));
         panelUsados.setBorder(BorderFactory.createTitledBorder("Colores usados"));
         panelRecientes = new JPanel(null);
         panelRecientes.setPreferredSize(new Dimension(260, 26));
         panelRecientes.setOpaque(false);
         panelUsados.add(panelRecientes);
-        panelNorte.add(panelUsados, BorderLayout.SOUTH);
+        PanelNorte.add(panelUsados, BorderLayout.SOUTH);
         renderRecientes();
      
         
@@ -204,7 +208,7 @@ public class EditorGui extends BaseFrame {
         
     }
     
-    private JComboBox<String> crearComboTamanios(){
+    private JComboBox<String> crearComboTamanio(){
           String[] tamanios = {"8", "10", "12", "14", "16", "18", "20", "24", "28", "32", "36", "48", "72"};
         JComboBox<String> combo = new JComboBox<>(tamanios);
         combo.setEditable(true);
@@ -226,14 +230,6 @@ public class EditorGui extends BaseFrame {
     private void aplicarFuente(String familia){
          SimpleAttributeSet attrs = new SimpleAttributeSet();
         StyleConstants.setFontFamily(attrs, familia);
-        aplicarAtributosCaracter(attrs);
-    }
-    private void aplicarTamanio(int tam) {
-        if (tam <= 0) {
-            return;
-        }
-        SimpleAttributeSet attrs = new SimpleAttributeSet();
-        StyleConstants.setFontSize(attrs, tam);
         aplicarAtributosCaracter(attrs);
     }
     
@@ -273,7 +269,7 @@ public class EditorGui extends BaseFrame {
         StyleConstants.setUnderline(attrs, !actual);
         aplicarAtributosCaracter(attrs);
     }
-    private void aplocarAlineacion(int alineacion){
+    private void aplicarAlineacion(int alineacion){
         StyledDocument doc = areaTexto.getStyledDocument();
         SimpleAttributeSet attrs = new SimpleAttributeSet();
         StyleConstants.setAlignment(attrs, alineacion);
@@ -331,7 +327,7 @@ public class EditorGui extends BaseFrame {
             }
         }
         coloresRecientes.add(0, c);
-        while (coloresRecientes.size() > MAX_RECENTES) {
+        while (coloresRecientes.size() > MAX_RECIENTES) {
             coloresRecientes.remove(coloresRecientes.size() - 1);
         }
         renderRecientes();
@@ -422,11 +418,11 @@ public class EditorGui extends BaseFrame {
     }
     private void guardarArchivoActual() {
         try {
-            if (archivoActual == null) {
+            if (ArchivoActual == null) {
                 guardarDocxConChooser();
                 return;
             }
-            Wordexportar.guardar(areaTexto, archivoActual);
+            Wordexportar.guardar(areaTexto, ArchivoActual);
             JOptionPane.showMessageDialog(this, "Archivo guardado.");
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Error al guardar: " + ex.getMessage());
@@ -438,8 +434,8 @@ public class EditorGui extends BaseFrame {
             JFileChooser fc = new JFileChooser();
             fc.setDialogTitle("Guardar como");
             fc.setFileFilter(new FileNameExtensionFilter("Documento Word (*.docx)", "docx"));
-            if (archivoActual != null) {
-                fc.setSelectedFile(archivoActual);
+            if (ArchivoActual != null) {
+                fc.setSelectedFile(ArchivoActual);
             }
             int r = fc.showSaveDialog(this);
             if (r != JFileChooser.APPROVE_OPTION) {
@@ -450,12 +446,16 @@ public class EditorGui extends BaseFrame {
             if (!ruta.toLowerCase().endsWith(".docx")) {
                 ruta += ".docx";
             }
-            archivoActual = new File(ruta);
-            Wordexportar.guardar(areaTexto, archivoActual);
+            ArchivoActual = new File(ruta);
+            Wordexportar.guardar(areaTexto, ArchivoActual);
             JOptionPane.showMessageDialog(this, "Guardado correctamente.");
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Error al guardar: " + ex.getMessage());
         }
     }
+      
+      
+      
+      
     
 }
